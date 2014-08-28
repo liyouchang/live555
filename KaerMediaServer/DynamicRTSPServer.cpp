@@ -68,13 +68,11 @@ DynamicRTSPServer::lookupServerMediaSession(char const* streamName) {
             if (smsExists) {
                 removeServerMediaSession(sms);
             }
-
             std::string descStr = "camera streamed by the LIVE555 Media Server";
             sms = ServerMediaSession::createNew(envir(), streamName, streamName, descStr.c_str());
             OutPacketBuffer::maxSize = 100000; // allow for some possibly large H.264 frames
-            sms->addSubsession(QueueServerMediaSubsession::createNew(envir(),True));
+            sms->addSubsession(QueueServerMediaSubsession::createNew(envir(),True,streamName));
             addServerMediaSession(sms);
-
             return sms;
         }
 

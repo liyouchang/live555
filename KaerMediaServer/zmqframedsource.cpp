@@ -2,50 +2,59 @@
 
 #include "GroupsockHelper.hh"
 
-ZmqFramedSource *ZmqFramedSource::createNew(UsageEnvironment &env)
+ZmqFramedSource *ZmqFramedSource::createNew(UsageEnvironment &env,const char * streamID)
 {
     ZmqFramedSource *source =  new ZmqFramedSource(env);
-//    envir()<<"connect ";
-    source->connect("tcp://localhost:5556","");
-//    envir()<<"connect end ";
+    //    envir()<<"connect ";
+    source->connect("tcp://192.168.40.195:5556",streamID);
+    //    envir()<<"connect end ";
     return source;
 }
 
 void ZmqFramedSource::doGetNextFrame()
 {
+
     //    if ((fLimitNumBytesToStream && fNumBytesToStream == 0)) {
     //        handleClosure(this);
     //        return;
     //    }
+    if(!subscriber->connected()){
+        envir() << "disconnected  "<<" no "<<tt<<"\n";
+
+        handleClosure(this);
+        return;
+    }
 
     fFrameSize = fMaxSize;
 
     if(fCurIndex >= fBufferSize){
-        zmq::message_t msg;
-        subscriber->recv(&msg);
+        zmq::message_t msgevp;
+        subscriber->recv(&msgevp);
+        zmq::message_t msgData;
+        subscriber->recv(&msgData);
 
-        if(msg.size() < totalBufferSize){
-            memcpy(fBuffer,msg.data(),msg.size());
-            fBufferSize = msg.size();
+        if(msgData.size() < totalBufferSize){
+            memcpy(fBuffer,msgData.data(),msgData.size());
+            fBufferSize = msgData.size();
             fCurIndex = 0;
         }else{
-            envir() << "receive msg "<<(int)msg.size()<<
+            envir() << "receive msg "<<(int)msgData.size()<<
                        " is more than max buffer size "<<(int)totalBufferSize ;
-
         }
     }
     int leftBufferSize = fBufferSize - fCurIndex;
     if(leftBufferSize < fMaxSize){
         fFrameSize = leftBufferSize;
         if(next){
-            envir() << "leftBufferSize  "<< leftBufferSize <<"  fMaxSize "<<fMaxSize << " no "<<tt<<"\n";
+            envir() << "leftBufferSize  "<< leftBufferSize <<
+                       "  fMaxSize "<<fMaxSize << " no "<<tt<<"\n";
             next = false;
         }
     }else{
-        envir() << "large leftBufferSize  "<< leftBufferSize <<"  fMaxSize "<<fMaxSize << " no "<<tt<<"\n";
         next =true;
     }
 
+    envir() << "large leftBufferSize  "<< leftBufferSize <<"  fMaxSize "<<fMaxSize << " no "<<tt<<"\n";
 
     memmove(fTo, &fBuffer[fCurIndex], fFrameSize);
     fCurIndex += fFrameSize;
@@ -94,7 +103,9 @@ ZmqFramedSource::~ZmqFramedSource()
 
 bool ZmqFramedSource::connect(std::string url, std::string filter)
 {
-    subscriber->connect("tcp://localhost:5556");
+    envir()<<"connect "<<filter.c_str()<<"  no:"<<tt<<" url "<< url.c_str()<<"\n";
+
+    subscriber->connect(url.c_str());
     //  Subscribe to zipcode, default is NYC, 10001
     subscriber->setsockopt(ZMQ_SUBSCRIBE, filter.c_str(), filter.length());
     return true;

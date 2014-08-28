@@ -3,15 +3,15 @@
 
 #include "H264VideoStreamFramer.hh"
 QueueServerMediaSubsession *QueueServerMediaSubsession::createNew(
-        UsageEnvironment &env, Boolean reuseFirstSource)
+        UsageEnvironment &env, Boolean reuseFirstSource,const char * streamID)
 {
-    return new QueueServerMediaSubsession(env,reuseFirstSource);
+    return new QueueServerMediaSubsession(env,reuseFirstSource,streamID);
 }
 
 QueueServerMediaSubsession::QueueServerMediaSubsession(
-        UsageEnvironment &env, Boolean reuseFirstSource)
+        UsageEnvironment &env, Boolean reuseFirstSource,const char * streamID)
     :OnDemandServerMediaSubsession(env, reuseFirstSource),
-      fAuxSDPLine(NULL),fDoneFlag(0),fDummyRTPSink(NULL)
+      fAuxSDPLine(NULL),fDoneFlag(0),fDummyRTPSink(NULL),streamID(streamID)
 {
 }
 
@@ -22,7 +22,6 @@ void QueueServerMediaSubsession::setDoneFlag() {
 QueueServerMediaSubsession::~QueueServerMediaSubsession()
 {
     delete[] fAuxSDPLine;
-
 }
 static void checkForAuxSDPLine(void* clientData) {
     QueueServerMediaSubsession* subsess = (QueueServerMediaSubsession*)clientData;
@@ -38,7 +37,6 @@ void QueueServerMediaSubsession::checkForAuxSDPLine1()
     } else if (fDummyRTPSink != NULL && (dasl = fDummyRTPSink->auxSDPLine()) != NULL) {
         fAuxSDPLine = strDup(dasl);
         fDummyRTPSink = NULL;
-
         // Signal the event loop that we're done:
         setDoneFlag();
     } else {
@@ -68,7 +66,7 @@ FramedSource *QueueServerMediaSubsession::createNewStreamSource(
 
     // Create the video source:
     //  if(fQueueInputSource == NULL)
-    ZmqFramedSource * inputSource = ZmqFramedSource::createNew(envir());
+    ZmqFramedSource * inputSource = ZmqFramedSource::createNew(envir(),streamID.c_str());
     if (inputSource == NULL) return NULL;
     // Create a framer for the Video Elementary Stream:
     return H264VideoStreamFramer::createNew(envir(), inputSource);

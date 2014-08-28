@@ -9,12 +9,13 @@
 class QueueServerMediaSubsession : public OnDemandServerMediaSubsession
 {
 public:
-    static QueueServerMediaSubsession* createNew(UsageEnvironment& env, Boolean reuseFirstSource);
+    static QueueServerMediaSubsession* createNew(
+            UsageEnvironment& env, Boolean reuseFirstSource,const char * streamID);
     virtual ~QueueServerMediaSubsession();
     void checkForAuxSDPLine1();
     void afterPlayingDummy1();
 protected:
-    QueueServerMediaSubsession(UsageEnvironment& env, Boolean reuseFirstSource);
+    QueueServerMediaSubsession(UsageEnvironment& env, Boolean reuseFirstSource,const char * streamID);
 
 
     void setDoneFlag();
@@ -28,7 +29,7 @@ protected: // new virtual functions, defined by all subclasses
                     FramedSource* inputSource);
     virtual char const* getAuxSDPLine(RTPSink* rtpSink,FramedSource* inputSource);
 public:
-
+    std::string streamID;
     char* fAuxSDPLine;
     char fDoneFlag; // used when setting up "fAuxSDPLine"
     RTPSink* fDummyRTPSink; // ditto

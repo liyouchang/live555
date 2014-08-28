@@ -12,7 +12,7 @@
 class ZmqFramedSource : public FramedSource
 {
 public:
-    static ZmqFramedSource* createNew(UsageEnvironment& env);
+    static ZmqFramedSource* createNew(UsageEnvironment& env, const char *streamID);
 
     void doGetNextFrame();
 
