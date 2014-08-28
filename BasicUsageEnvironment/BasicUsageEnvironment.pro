@@ -19,7 +19,7 @@ SOURCES += \
     BasicHashTable.cpp
 
 #target.files = $$DESTDIR/$$TARGET
-target.path = $$PWD/../lib
+target.path = $$PWD/../libs
 INSTALLS += target
 
 HEADERS += \

@@ -11,7 +11,7 @@ INCLUDEPATH += ../groupsock/include ../UsageEnvironment/include
 
 DEFINES += SOCKLEN_T=socklen_t
 
-target.path = $$PWD/../lib
+target.path = $$PWD/../libs
 INSTALLS += target
 
 SOURCES += \

@@ -8,7 +8,7 @@ CONFIG += staticlib
 
 INCLUDEPATH += ../UsageEnvironment/include ../groupsock/include
 
-target.path = $$PWD/../lib
+target.path = $$PWD/../libs
 INSTALLS += target
 
 SOURCES += \

@@ -22,6 +22,7 @@ win32 {
 
 DEFINES += ZMQ_HAVE_WINDOWS ZMQ_STATIC  __WINDOWS__
 
+#LIBS += -lws2_32  -lAdvapi32
 
 }
 
@@ -51,6 +52,8 @@ linux {
             ZMQ_HAVE_TCP_KEEPINTVL ZMQ_HAVE_UIO
 
     DEFINES += ZMQ_HAVE_LINUX
+
+#LIBS += -pthread
 }
 android {
 

@@ -11,7 +11,7 @@ INCLUDEPATH +=../liveMedia/include ../BasicUsageEnvironment/include \
 
 DEFINES += SOCKLEN_T=socklen_t READ_FROM_FILES_SYNCHRONOUSLY
 
-target.path = $$PWD/../lib
+target.path = $$PWD/../libs
 INSTALLS += target
 
 SOURCES += \

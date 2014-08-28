@@ -1,10 +1,13 @@
 #include "zmqframedsource.h"
 
+#include "GroupsockHelper.hh"
 
 ZmqFramedSource *ZmqFramedSource::createNew(UsageEnvironment &env)
 {
     ZmqFramedSource *source =  new ZmqFramedSource(env);
+//    envir()<<"connect ";
     source->connect("tcp://localhost:5556","");
+//    envir()<<"connect end ";
     return source;
 }
 
@@ -94,4 +97,5 @@ bool ZmqFramedSource::connect(std::string url, std::string filter)
     subscriber->connect("tcp://localhost:5556");
     //  Subscribe to zipcode, default is NYC, 10001
     subscriber->setsockopt(ZMQ_SUBSCRIBE, filter.c_str(), filter.length());
+    return true;
 }

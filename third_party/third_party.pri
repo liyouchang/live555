@@ -5,14 +5,14 @@
 win32 {
 
 DEFINES += _UNICODE UNICODE WIN32_LEAN_AND_MEAN
-    Debug {
-        DEFINES += _DEBUG
-        output_dir = $$PWD/../out/debug
-    }
+#    Debug {
+#        DEFINES += _DEBUG
+#        output_dir = $$PWD/../out/debug
+#    }
 
-    Release {
-        output_dir = $$PWD/../out/release
-    }
+#    Release {
+#        output_dir = $$PWD/../out/release
+#    }
 
 }
 
@@ -29,5 +29,5 @@ linux {
     DEFINES += POSIX LINUX
 }
 
-target.path = $$PWD/../../lib
+target.path = $$PWD/../libs
 INSTALLS += target

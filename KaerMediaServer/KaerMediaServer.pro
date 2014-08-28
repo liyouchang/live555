@@ -15,12 +15,23 @@ INCLUDEPATH +=../liveMedia/include ../BasicUsageEnvironment/include \
 
 INCLUDEPATH  += ../third_party/cppzmq/include
 
+LIBS += -L$$PWD/../libs
 
-LIBS += -L$$PWD/../lib
+win32 {
+
+DEFINES += ZMQ_HAVE_WINDOWS ZMQ_STATIC  __WINDOWS__
+LIBS +=  -lliveMedia -lgroupsock -lBasicUsageEnvironment  -lUsageEnvironment
+LIBS += -lcppzmq
+LIBS += -lws2_32  -lAdvapi32
+
+}
+linux {
 LIBS +=  -lliveMedia -lgroupsock -lBasicUsageEnvironment  -lUsageEnvironment
 LIBS += -lcppzmq -pthread
 
-target.path = $$PWD/../lib
+}
+
+target.path = $$PWD/../bin
 INSTALLS += target
 
 
