@@ -23,10 +23,10 @@ protected:
     bool connect(std::string url,std::string filter);
 
 private:
-    zmq::context_t *context;
     zmq::socket_t *subscriber;
 //    bool isConnected;
-
+    int tt;
+    bool next;
     u_int8_t* fBuffer;
     u_int64_t fBufferSize;
     u_int64_t fCurIndex;

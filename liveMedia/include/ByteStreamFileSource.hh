@@ -68,7 +68,7 @@ private:
 
 protected:
   u_int64_t fFileSize;
-
+    int tt;
 private:
   unsigned fPreferredFrameSize;
   unsigned fPlayTimePerFrame;

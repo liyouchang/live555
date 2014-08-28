@@ -9,7 +9,7 @@ CONFIG += staticlib
 INCLUDEPATH +=../liveMedia/include ../BasicUsageEnvironment/include \
               ../groupsock/include ../UsageEnvironment/include
 
-DEFINES += SOCKLEN_T=socklen_t
+DEFINES += SOCKLEN_T=socklen_t READ_FROM_FILES_SYNCHRONOUSLY
 
 target.path = $$PWD/../lib
 INSTALLS += target

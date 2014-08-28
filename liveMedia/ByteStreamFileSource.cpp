@@ -67,6 +67,7 @@ void ByteStreamFileSource::seekToByteRelative(int64_t offset, u_int64_t numBytes
 void ByteStreamFileSource::seekToEnd() {
   SeekFile64(fFid, 0, SEEK_END);
 }
+static int test1 = 0;
 
 ByteStreamFileSource::ByteStreamFileSource(UsageEnvironment& env, FILE* fid,
 					   unsigned preferredFrameSize,
@@ -77,12 +78,16 @@ ByteStreamFileSource::ByteStreamFileSource(UsageEnvironment& env, FILE* fid,
 #ifndef READ_FROM_FILES_SYNCHRONOUSLY
   makeSocketNonBlocking(fileno(fFid));
 #endif
+    tt = test1++;
+//    envir()<<"ByteStreamFileSource create "<<tt<<"\n";
 
   // Test whether the file is seekable
   fFidIsSeekable = FileIsSeekable(fFid);
 }
 
 ByteStreamFileSource::~ByteStreamFileSource() {
+//    envir()<<"ByteStreamFileSource destroy "<<tt<<"\n";
+
   if (fFid == NULL) return;
 
 #ifndef READ_FROM_FILES_SYNCHRONOUSLY
@@ -149,6 +154,8 @@ void ByteStreamFileSource::doReadFromFile() {
     return;
   }
   fNumBytesToStream -= fFrameSize;
+
+//  envir()<<"ByteStreamFileSource::doReadFromFile "<<tt<< "size "<<fFrameSize<<"\n";
 
   // Set the 'presentation time':
   if (fPlayTimePerFrame > 0 && fPreferredFrameSize > 0) {
